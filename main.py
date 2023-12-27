@@ -4,7 +4,7 @@ import requests
 from datetime import datetime, timedelta
 import flask
 
-bot = telebot.TeleBot('6759330550:AAEPbhwGKuAts9XvwbUnv_MsjuF_G1lmfRk')
+bot = telebot.TeleBot('6759330550:AAH_4Po0L6qb3MvrSGhX9K-2Ph_C5FPIKOw')
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
