@@ -37,19 +37,4 @@ def chatbot(uid, text):
     return res
 
 
-server = flask.Flask(__name__)
-
-@server.route("/bot", methods=['POST'])
-def getMessage():
-    bot.process_new_updates([telebot.types.Update.de_json(flask.request.stream.read().decode("utf-8"))])
-    return "!", 200
-
-@server.route("/")
-def webhook():
-    bot.remove_webhook()
-    link = 'https://'+str(flask.request.host)
-    bot.set_webhook(url=f"{link}/bot")
-    return "Success!", 200
-
-if __name__ == "__main__":
-    server.run(host="0.0.0.0", port=81)
+bot.infinity_polling()
