@@ -3,8 +3,9 @@ from telebot import types
 import requests
 from datetime import datetime, timedelta
 import flask
+from user_agent import generate_user_agent as rrr
 
-bot = telebot.TeleBot('6759330550:AAH_4Po0L6qb3MvrSGhX9K-2Ph_C5FPIKOw')
+bot = telebot.TeleBot('6643702223:AAF6u8O7KoJ_Or9cVpOGmDD0RnZ5z_63H-k')
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
@@ -15,26 +16,26 @@ def send_welcome(message):
     ista = types.InlineKeyboardButton(text='🔮 Follow Me On Instagram 🔮', url='https://www.instagram.com/sanch1t')
     keyboard.add(developer_button,ista)
     bot.reply_to(message, text, parse_mode='markdown', reply_markup=keyboard)
-    bot.send_chat_action(message.chat.id, 'typing')
-    bot.send_sticker(message.chat.id, "CAACAgEAAxkBAAIHtWWK_7zf8Yst4vAC2KQyXbqQ1JCcAAIpBAACCW5ZRFmkpjp2avNlMwQ")
-    bot.send_chat_action(message.chat.id, 'typing')
-    bot.send_message(message.chat.id, f"Hey, This Is [Bard Ai](tg://settings).\nHow Can I Help You [{usr}](tg://settings) ?", parse_mode='markdown')
 
 @bot.message_handler(func=lambda message: True)
 def reply_to_user(message):
     uid = message.from_user.id
     un = message.from_user.first_name
-    wait_msg = bot.reply_to(message, "_Please wait for a few seconds..._ ⏳🥺", parse_mode='markdown')
+    wait_msg = bot.send_message(message.chat.id, "<i>🔍 Searching On It...</i>", parse_mode='HTML')
     text = message.text
-    res = chatbot(uid, text)
-    bot.delete_message(message.chat.id, wait_msg.message_id)
-    bot.send_chat_action(message.chat.id, 'typing')
-    bot.reply_to(message, f"_{res}_", parse_mode="Markdown")
+    res = chatbot(message, uid, text)
+    bot.edit_message_text(f"{res}", message.chat.id, wait_msg.message_id, parse_mode='Markdown')
 
-def chatbot(uid, text):
-    url = requests.get(f"https://api.safone.dev/bard?message={text}").json()    
-    res = url['candidates'][0]['content']['parts'][0]['text']
-    return res
-
+def chatbot(message, uid, text):
+  head = {
+    'Host': 'api.safone.dev',
+    'user-agent': str(rrr())
+  }
+  url = requests.get(f"https://api.safone.dev/bard?message={text}", headers=head).json()
+  try:
+  	res = url['candidates'][0]['content']['parts'][0]['text']
+  	return res
+  except:
+  	bot.send_message(message.chat.id,f"_Regrettably, your choice of words includes prohibited language. Kindly opt for more suitable expressions. 🚫🗣️ Let's keep the conversation positive!_ 🌟👍",parse_mode='Markdown')	
 
 bot.infinity_polling()
