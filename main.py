@@ -31,7 +31,8 @@ def chatbot(message, uid, text):
     'Host': 'api.safone.dev',
     'user-agent': str(rrr())
   }
-  url = requests.get(f"https://api.safone.dev/bard?message={text}", headers=head).json()
+  tr = requests.get(f"https://translate-api-mu.vercel.app/translate?from=auto&to=en&text={text}").json()['translation']
+  url = requests.get(f"https://api.safone.dev/bard?message={tr}", headers=head).json()
   try:
   	res = url['candidates'][0]['content']['parts'][0]['text']
   	return res
