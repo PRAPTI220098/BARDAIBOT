@@ -5,8 +5,7 @@ import requests
 from datetime import datetime, timedelta
 import flask
 from user_agent import generate_user_agent as rrr
-ttt = os.environ.get('BOT')
-bot = telebot.TeleBot('ttt')
+bot = telebot.TeleBot('6643702223:AAF6u8O7KoJ_Or9cVpOGmDD0RnZ5z_63H-k')
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
