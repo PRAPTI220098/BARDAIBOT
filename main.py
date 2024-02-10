@@ -5,7 +5,7 @@ import requests
 from datetime import datetime, timedelta
 import flask
 from user_agent import generate_user_agent as rrr
-bot = telebot.TeleBot('6643702223:AAFxHPl8lz7ZTWhqXtrq0NnLx2yfXhMSeJA')
+bot = telebot.TeleBot('6643702223:AAEfr-iKfTMaaYacQ6iHUUyiq0YgO7wDs58')
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
     	usr = message.from_user.first_name
@@ -36,5 +36,23 @@ def chatbot(message, uid, text):
   except:
   	de=requests.get(f"https://translate-api-mu.vercel.app/translate?from=auto&to={message.from_user.language_code}&text=_Regrettably, your choice of words includes prohibited language. Kindly opt for more suitable expressions. 🚫🗣️ Let's keep the conversation positive!_ 🌟👍").json()['translation']
   	bot.send_message(message.chat.id, de,parse_mode='Markdown')	
+      
+server = flask.Flask(__name__)
 
-bot.polling(non_stop=True)
+# Handle incoming updates from Telegram
+@server.route("/bot", methods=['POST'])
+def getMessage():
+    bot.process_new_updates([telebot.types.Update.de_json(flask.request.stream.read().decode("utf-8"))])
+    return "!", 200
+
+# Set up the webhook route
+@server.route("/")
+def webhook():
+    bot.remove_webhook()
+    link = 'https://'+str(flask.request.host)
+    bot.set_webhook(url=f"{link}/bot")
+    return "Sanchit Ka Mehnga Bot!", 200
+
+if __name__ == "__main__":
+    # Run the Flask server
+    server.run(host="0.0.0.0", port=81)
