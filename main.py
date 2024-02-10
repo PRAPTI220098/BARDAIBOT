@@ -5,7 +5,7 @@ import requests
 from datetime import datetime, timedelta
 import flask
 from user_agent import generate_user_agent as rrr
-bot = telebot.TeleBot('6643702223:AAFLg_zpxoxHD8QhhYw3IPUzedKzg8rK8QQ')
+bot = telebot.TeleBot('6867143228:AAE0_soQBoXOU3GGsWPKhJ-6cTzO7DvVgsE')
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
     	usr = message.from_user.first_name
@@ -26,14 +26,10 @@ def reply_to_user(message):
     res = chatbot(message, uid, text)
     bot.edit_message_text(f"{res}", message.chat.id, wait_msg.message_id, parse_mode='Markdown')
 
-def chatbot(message, uid, text):
-  head = {
-    'Host': 'api.safone.dev',
-    'user-agent': str(rrr())
-  }
+def chatbot(message, uid, text):    
   tr = requests.get(f"https://translate-api-mu.vercel.app/translate?from=auto&to={message.from_user.language_code}&text={text}").json()['translation']
-  url = requests.get(f"https://api.safone.dev/bard?message={tr}", headers=head).json()
-  try:
+  url = requests.get(f"https://api.safone.dev/bard?message={tr}",headers={"accept": "application/json"}).json()
+  try:  	
   	res = url['candidates'][0]['content']['parts'][0]['text']
   	return res
   except:
