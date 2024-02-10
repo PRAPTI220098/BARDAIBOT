@@ -39,13 +39,11 @@ def chatbot(message, uid, text):
       
 server = flask.Flask(__name__)
 
-# Handle incoming updates from Telegram
 @server.route("/bot", methods=['POST'])
 def getMessage():
     bot.process_new_updates([telebot.types.Update.de_json(flask.request.stream.read().decode("utf-8"))])
     return "!", 200
-
-# Set up the webhook route
+    
 @server.route("/")
 def webhook():
     bot.remove_webhook()
@@ -54,5 +52,4 @@ def webhook():
     return "Sanchit Ka Mehnga Bot!", 200
 
 if __name__ == "__main__":
-    # Run the Flask server
     server.run(host="0.0.0.0", port=81)
