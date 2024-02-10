@@ -2,10 +2,9 @@ import os
 import telebot
 from telebot import types
 import requests
-from datetime import datetime, timedelta
 import flask
 from user_agent import generate_user_agent as rrr
-bot = telebot.TeleBot('6867143228:AAE0_soQBoXOU3GGsWPKhJ-6cTzO7DvVgsE')
+bot = telebot.TeleBot('6643702223:AAFLg_zpxoxHD8QhhYw3IPUzedKzg8rK8QQ')
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
     	usr = message.from_user.first_name
