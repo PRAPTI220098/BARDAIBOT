@@ -26,8 +26,9 @@ def reply_to_user(message):
     bot.edit_message_text(f"{res}", message.chat.id, wait_msg.message_id, parse_mode='Markdown')
 
 def chatbot(message, uid, text):    
-  tr = requests.get(f"https://translate-api-mu.vercel.app/translate?from=auto&to={message.from_user.language_code}&text={text}").json()['translation']
-  url = requests.get(f"https://api.safone.dev/bard?message={tr}",headers={"accept": "application/json"}).json()
+  trans = requests.get(f"https://translate-api-mu.vercel.app/translate?from=auto&to={message.from_user.language_code}&text={text}").json()
+  trp = trans['translation']
+  url = requests.get(f"https://api.safone.dev/bard?message={trp}").json()
   try:  	
   	res = url['candidates'][0]['content']['parts'][0]['text']
   	return res
